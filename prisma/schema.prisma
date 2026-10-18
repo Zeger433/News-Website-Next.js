@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// 1. ADMIN MODEL (For login - use this!)
+// ============================================
+
+
+// ============================================
+// 2. AUTHOR MODEL (Fixed - using Int for id)
+// ============================================
+model Author {
+  id        Int      @id @default(autoincrement()) // Changed from String to Int
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("author")
+  bio       String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  articles Article[]
+
+  @@map("authors")
+}
+
+// ============================================
+// 3. USER MODEL
+// ============================================
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("subscriber")
+  avatar    String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  comments        Comment[]
+  subscriptions   Subscription[]
+  contactMessages ContactMessage[]
+}
+
+// ============================================
+// 4. CATEGORY MODEL
+// ============================================
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  icon        String?
+  color       String?
+  createdAt   DateTime @default(now())
+
+  articles Article[]
+}
+
+// ============================================
+// 5. ARTICLE MODEL
+// ============================================
+model Article {
+  id          Int       @id @default(autoincrement())
+  title       String
+  slug        String    @unique
+  content     String?   @db.Text
+  excerpt     String?
+  imageUrl    String?
+  authorId    Int? // Now matches Author.id (Int)
+  author      Author?   @relation(fields: [authorId], references: [id])
+  categoryId  Int?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  views       Int       @default(0)
+  likes       Int       @default(0)
+  date        DateTime?
+  status      String    @default("draft")
+  isFeatured  Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  comments    Comment[]
+  tags        Tag[]        @relation("article_tags")
+  articleTags ArticleTag[]
+}
+
+// ============================================
+// 6. TAG MODEL
+// ============================================
+model Tag {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  slug        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  articles    Article[]    @relation("article_tags")
+  articleTags ArticleTag[]
+}
+
+// ============================================
+// 7. ARTICLE_TAGS (Junction Table)
+// ============================================
+model ArticleTag {
+  articleId Int
+  tagId     Int
+  article   Article @relation(fields: [articleId], references: [id])
+  tag       Tag     @relation(fields: [tagId], references: [id])
+
+  @@id([articleId, tagId])
+}
+
+// ============================================
+// 8. COMMENT MODEL
+// ============================================
+model Comment {
+  id        Int       @id @default(autoincrement())
+  articleId Int
+  article   Article   @relation(fields: [articleId], references: [id])
+  userId    Int?
+  user      User?     @relation(fields: [userId], references: [id])
+  content   String    @db.Text
+  parentId  Int?
+  parent    Comment?  @relation("comment_replies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("comment_replies")
+  status    String    @default("pending")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// ============================================
+// 9. SUBSCRIPTION MODEL
+// ============================================
+model Subscription {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  user      User      @relation(fields: [userId], references: [id])
+  planType  String
+  price     Float?
+  features  Json?
+  startDate DateTime
+  endDate   DateTime?
+  status    String    @default("active")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// ============================================
+// 10. CONTACT MESSAGE MODEL
+// ============================================
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+// ============================================
+// 11. SHOP PRODUCT MODEL
+// ============================================
+model ShopProduct {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       String
+  imageUrl    String?
+  description String?
+  stock       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
