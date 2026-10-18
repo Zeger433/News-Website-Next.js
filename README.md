@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📰 News Website — Next.js
 
-## Getting Started
+A responsive news website built with Next.js and React, featuring an interactive About page, news coverage information, mission and vision statements, impact statistics, team profiles, frequently asked questions, and a subscription section.
 
-First, run the development server:
+## ✨ Features
+
+- **About Page:** Displays website information and introduction.
+- **News Coverage:** Presents coverage categories and descriptions.
+- **Mission & Vision:** Communicates the platform's goals and direction.
+- **Impact Statistics:** Displays key statistics dynamically.
+- **Our Team:** Showcases team members, roles, and profile images.
+- **Interactive FAQs:** Expandable questions and answers using React state.
+- **Subscription Section:** Includes a call-to-action button for readers.
+- **Reusable Components:** Shared Header and Footer components.
+- **Dynamic Content:** Uses centralized data from `@/app/data/articles`.
+- **Responsive Design:** CSS-based styling for the website layout.
+
+## 🛠️ Technologies Used
+
+- Next.js
+- React
+- TypeScript
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+
+## 📁 Project Structure
+
+```text
+project/
+├── app/
+│   ├── components/
+│   │   ├── Header.tsx
+│   │   └── Footer.tsx
+│   ├── data/
+│   │   └── articles.ts
+│   └── about/
+│       └── page.tsx
+├── public/
+│   └── images/
+├── package.json
+└── README.md
+```
+
+*Note: The structure is illustrative; adjust it to match your actual project.*
+
+## ⚙️ Installation
+
+**1. Clone the repository**
+
+```bash
+git clone <your-repository-url>
+cd <project-folder>
+```
+
+**2. Install dependencies**
+
+```bash
+npm install
+```
+
+**3. Start the development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**4. Open the website**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧩 Main Components
 
-## Learn More
+- `Header`: Displays the website's navigation.
+- `Footer`: Displays the footer section.
+- `About`: Renders the About page and its interactive FAQ section.
+- `articles`: Stores content for coverage, mission, vision, statistics, team members, FAQs, and images.
 
-To learn more about Next.js, take a look at the following resources:
+## 🔄 How It Works
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The About page imports content from a centralized data file and renders sections dynamically using React's `map()` method. The `useState` hook manages the expandable FAQ items, allowing users to open and close questions interactively.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Future Improvements
 
-## Deploy on Vercel
+- Connect the Subscribe button to a newsletter service.
+- Add individual news article pages.
+- Integrate a CMS or database for content management.
+- Improve accessibility and mobile navigation.
+- Add SEO metadata and social sharing features.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Choose and include an appropriate license before distributing the project.
